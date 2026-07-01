@@ -1,0 +1,167 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "title": "Premium Oversized Black T-Shirt",
+      "price": 899,
+      "description": "Comfortable oversized cotton t-shirt with premium quality fabric for daily wear.",
+      "category": "fashion",
+      "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab"
+    },
+    {
+      "id": "2",
+      "title": "Wireless Bluetooth Headphones",
+      "price": 2499,
+      "description": "Noise cancellation wireless headphones with 40 hours battery backup.",
+      "category": "electronics",
+      "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e"
+    },
+    {
+      "id": "3",
+      "title": "Minimal White Sneakers",
+      "price": 3199,
+      "description": "Stylish and lightweight sneakers perfect for casual and streetwear outfits.",
+      "category": "footwear",
+      "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff"
+    },
+    {
+      "id": "4",
+      "title": "Modern Wooden Chair",
+      "price": 5499,
+      "description": "Elegant wooden chair with premium finish suitable for home and office.",
+      "category": "furniture",
+      "image": "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85"
+    },
+    {
+      "id": "5",
+      "title": "Smart Fitness Watch",
+      "price": 4299,
+      "description": "Track heart rate, sleep, calories and workouts with smart connectivity.",
+      "category": "electronics",
+      "image": "https://images.unsplash.com/photo-1517430816045-df4b7de11d1d"
+    },
+    {
+      "id": "6",
+      "title": "Gaming Mechanical Keyboard",
+      "price": 3599,
+      "description": "RGB mechanical keyboard with blue switches for gaming enthusiasts.",
+      "category": "electronics",
+      "image": "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae"
+    },
+    {
+      "id": "7",
+      "title": "Classic Denim Jacket",
+      "price": 2799,
+      "description": "Stylish denim jacket with premium stitching and comfortable fit.",
+      "category": "fashion",
+      "image": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246"
+    },
+    {
+      "id": "8",
+      "title": "Professional DSLR Camera",
+      "price": 45999,
+      "description": "High-quality DSLR camera for photography and cinematic videography.",
+      "category": "electronics",
+      "image": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32"
+    },
+    {
+      "id": "9",
+      "title": "Luxury Leather Backpack",
+      "price": 3999,
+      "description": "Premium leather backpack with spacious compartments and modern design.",
+      "category": "bags",
+      "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff"
+    },
+    {
+      "id": "10",
+      "title": "Portable Bluetooth Speaker",
+      "price": 1999,
+      "description": "Compact waterproof speaker with deep bass and powerful sound.",
+      "category": "electronics",
+      "image": "https://images.unsplash.com/photo-1585386959984-a41552231658"
+    },
+    {
+      "id": "11",
+      "title": "Ergonomic Office Desk",
+      "price": 8999,
+      "description": "Modern office desk with ergonomic design and storage space.",
+      "category": "furniture",
+      "image": "https://images.unsplash.com/photo-1497366754035-f200968a6e72"
+    },
+    {
+      "id": "12",
+      "title": "Cotton Hoodie for Winter",
+      "price": 1899,
+      "description": "Warm and comfortable hoodie with soft fleece lining.",
+      "category": "fashion",
+      "image": "https://images.unsplash.com/photo-1523398002811-999ca8dec234"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "john_doe",
+      "email": "john@example.com",
+      "password": "john123"
+    },
+    {
+      "id": "2",
+      "username": "emma_wilson",
+      "email": "emma@example.com",
+      "password": "emma123"
+    },
+    {
+      "id": "3",
+      "username": "alex_smith",
+      "email": "alex@example.com",
+      "password": "alex123"
+    },
+    {
+      "id": "4",
+      "username": "olivia_jones",
+      "email": "olivia@example.com",
+      "password": "olivia123"
+    },
+    {
+      "id": "5",
+      "username": "michael_lee",
+      "email": "michael@example.com",
+      "password": "michael123"
+    },
+    {
+      "name": "prem",
+      "email": "dcds@ssd.in",
+      "password": "prem123",
+      "id": "fly5Pi4G4x0"
+    },
+    {
+      "name": "nama",
+      "email": "nama@gmail.com",
+      "password": "123456",
+      "id": "SI7xp2iVcgU"
+    },
+    {
+      "name": "bhaaaa",
+      "email": "dcds@ssd.in",
+      "password": "123456",
+      "id": "SYG6q18PsTo"
+    }
+  ],
+  "cart": [
+    {
+      "id": "0",
+      "userId": 0,
+      "products": [
+        {
+          "id": 0,
+          "title": "string",
+          "price": 0.1,
+          "description": "string",
+          "category": "string",
+          "image": "http://example.com"
+        }
+      ]
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
