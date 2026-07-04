@@ -2,11 +2,14 @@ const Button = ({
     children,
     type = "button",
     className = "",
+    loading = false,
+    disabled = false,
     ...props
   }) => {
     return (
       <button
         type={type}
+        disabled={disabled || loading}
         className={`
           w-full
           py-3
@@ -17,11 +20,13 @@ const Button = ({
           duration-300
           bg-[var(--primary)]
           hover:bg-[var(--primary-hover)]
+          disabled:opacity-60
+          disabled:cursor-not-allowed
           ${className}
         `}
         {...props}
       >
-        {children}
+        {loading ? "Please wait..." : children}
       </button>
     );
   };
