@@ -2,23 +2,26 @@ import Navbar from "../../../components/layout/Navbar";
 import Input from "../../../components/common/Input";
 import Button from "../../../components/common/Button";
 import Divider from "../../../components/common/Divider";
-import Checkbox from "../../../components/common/Checkbox";
 
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../../schemas/loginSchema";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import { loginUser } from "../../../store/actions/userActions";
 
 const Login = () => {
   const navigate = useNavigate();
-  const {register,handleSubmit , formState : {errors}} = useForm({resolver :zodResolver(loginSchema)})
+  const {register,handleSubmit , formState : {errors, isSubmitting}} = useForm({resolver :zodResolver(loginSchema)})
   const dispatch = useDispatch();
-  const onSubmit = async (user) => {
-   console.log(user);
-   const reslogin = await dispatch(loginUser(user));
-   console.log("reslogin",reslogin)
+  const onSubmit = async (credentials) => {
+   try {
+    await dispatch(loginUser(credentials));
+    navigate("/dashboard");
+   } catch (error) {
+    toast.error(error.message || "Invalid email or password");
+   }
   }
 
   return (
@@ -116,13 +119,13 @@ const Login = () => {
               label="Remember me for 30 days"
             /> */}
 
-            <Button type="submit">
+            <Button type="submit" loading={isSubmitting}>
               Login
             </Button>
           </form>
 
           <p className="text-center mt-6">
-            Don't have an account?
+            Don&apos;t have an account?
             <span onClick={() => navigate("/register")}
               className="
               text-[var(--primary)]

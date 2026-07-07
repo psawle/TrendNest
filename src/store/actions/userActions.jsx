@@ -1,5 +1,6 @@
 
 import instance from "../../service/axios";
+import { setUser, logout } from "../reducers/userSlice";
 
 export const asyncUserRegister = (user) => async () => {
    const res = await instance.post("/users",user);
@@ -16,18 +17,32 @@ export const asyncUpdateUser = (id, user) => async () => {
    return res.data;
 }
 
-export const loginUser = (user) => async (dispatch,getState) => {
-   try {
-      //  const res = await instance.get(`/users?email=${user?.email}&password=${user?.password}`)
-      const res = await instance.get(`/users?email=${user.email}`, {
-         params: {
-           email: user.email.trim(),
-           password: user.password.trim(),
-         },
-       });
-       console.log("ressss",res)
-       return res;
-   } catch (error) {
-       console.log("error in login",error)
+export const loginUser = (credentials) => async (dispatch) => {
+   const res = await instance.get("/users", {
+      params: {
+         email: credentials.email.trim(),
+         password: credentials.password.trim(),
+      },
+   });
+
+   const user = res.data[0];
+   if (!user) {
+      throw new Error("Invalid email or password");
    }
+
+   const safeUser = { ...user };
+   delete safeUser.password;
+   const token = btoa(`${user.id}:${Date.now()}`);
+
+   localStorage.setItem("token", token);
+   localStorage.setItem("user", JSON.stringify(safeUser));
+   dispatch(setUser(safeUser));
+
+   return safeUser;
+}
+
+export const logoutUser = () => (dispatch) => {
+   localStorage.removeItem("token");
+   localStorage.removeItem("user");
+   dispatch(logout());
 }

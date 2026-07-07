@@ -1,8 +1,6 @@
-# Modern Ecommerce Platform
+# TrendNest
 
-A production-ready ecommerce frontend application built with React, TypeScript, Redux Toolkit, Tailwind CSS, Zod, and Stripe.
-
-The project focuses on scalability, maintainability, performance, and modern frontend architecture while delivering a seamless shopping experience.
+An ecommerce frontend built with React, Redux Toolkit, Tailwind CSS, React Hook Form, and Zod, backed by a `json-server` mock API for local development.
 
 ---
 
@@ -11,40 +9,25 @@ The project focuses on scalability, maintainability, performance, and modern fro
 ### Authentication & Authorization
 
 * User Registration
-* User Login
-* Secure Authentication Flow
-* Protected Routes
-* Persistent User Sessions
-* Logout Functionality
+* User Login (mock auth against `json-server`, token stored in `localStorage`)
+* Protected Routes (dashboard and admin pages require login)
+* Logout (clears stored session)
 
 ### Product Management
 
-* Product Listing
-* Product Details Page
-* Product Search
-* Category Filtering
-* Responsive Product Grid
+* Admin: Create Product
+* Admin: Edit Product
 
-### Shopping Experience
+### User Management
 
-* Add to Cart
-* Update Cart Quantity
-* Remove Cart Items
-* Wishlist Management
-* Buy Now Functionality
+* Admin: Create User
+* Admin: Edit User
 
-### Checkout & Payments
+### In Progress
 
-* Secure Stripe Integration
-* Order Summary
-* Checkout Flow
-* Payment Confirmation
-
-### User Dashboard
-
-* Profile Management
-* Order History
-* Account Settings
+* Product listing / product detail pages (currently placeholders)
+* Shopping cart (Redux slice scaffolded, no actions yet)
+* Wishlist, checkout, payments, order history
 
 ---
 
@@ -52,8 +35,7 @@ The project focuses on scalability, maintainability, performance, and modern fro
 
 ### Frontend
 
-* React.js
-* TypeScript
+* React (Vite)
 * Redux Toolkit
 * React Router DOM
 * Tailwind CSS
@@ -61,58 +43,33 @@ The project focuses on scalability, maintainability, performance, and modern fro
 * Zod
 * Axios
 
-### State Management
+### Mock Backend
 
-* Redux Toolkit
-* Redux Persist
-
-### Payments
-
-* Stripe
-
-### Deployment
-
-* AWS S3
-* AWS CloudFront
+* json-server (`db.json`)
 
 ---
 
 ## Project Architecture
 
+```
 src/
-├── app/
-├── api/
-├── assets/
+├── api/                 # (removed — consolidated into service/axios.js)
 ├── components/
-│ ├── common/
-│ ├── layout/
-│ └── ui/
-├── features/
-│ ├── auth/
-│ ├── products/
-│ ├── cart/
-│ ├── wishlist/
-│ └── orders/
-├── hooks/
-├── pages/
-├── routes/
-├── schemas/
-├── services/
-├── types/
-├── utils/
-├── App.tsx
-└── main.tsx
-
----
-
-## Performance Goals
-
-* Fully Responsive Design
-* Reusable Component Architecture
-* Type-Safe Development
-* Scalable State Management
-* Optimized API Handling
-* Production-Ready Folder Structure
+│   ├── common/          # Button, Input, Checkbox, Divider, Spinner, ErrorBoundary
+│   └── layout/           # Navbar
+├── feature/
+│   ├── admin/            # CreateProduct, UpdateProduct
+│   ├── auth/
+│   │   └── pages/         # Login, Register
+│   ├── pages/             # Home, Product, Dashboard
+│   └── users/             # CreateUser, UpdateUser
+├── routes/                # Public, Admin, ProtectedRoutes
+├── schemas/               # zod schemas
+├── service/               # axios instance
+├── store/                 # Redux Toolkit store, slices, actions
+├── App.jsx
+└── main.jsx
+```
 
 ---
 
@@ -120,38 +77,46 @@ src/
 
 Clone the repository:
 
-git clone https://github.com/yourusername/modern-ecommerce-platform.git
+```
+git clone <repo-url>
+```
 
 Install dependencies:
 
+```
 npm install
+```
 
-Start development server:
+Start the mock API (json-server) using `db.json`, then start the dev server:
 
+```
 npm run dev
+```
 
 ---
 
 ## Environment Variables
 
-Create a .env file in the root directory.
+Create a `.env` file in the root directory:
 
-VITE_API_BASE_URL=
-VITE_STRIPE_PUBLISHABLE_KEY=
+```
+VITE_BASE_URL=http://localhost:3000
+```
 
 ---
 
 ## Roadmap
 
-* Authentication System
-* Product Catalog
-* Shopping Cart
-* Wishlist
-* Stripe Checkout
-* User Dashboard
-* Order Management
-* AWS Deployment
-* CI/CD Pipeline
+* [x] Authentication System (mock, via json-server)
+* [x] Protected Routes
+* [x] Admin Product CRUD (create/edit)
+* [x] Admin User CRUD (create/edit)
+* [ ] Product Catalog (listing + detail pages)
+* [ ] Shopping Cart
+* [ ] Wishlist
+* [ ] Checkout / Payments
+* [ ] Order Management
+* [ ] Production deployment
 
 ---
 

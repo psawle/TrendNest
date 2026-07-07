@@ -1,33 +1,27 @@
 import Navbar from "../../../components/layout/Navbar";
 import Input from "../../../components/common/Input";
 import Button from "../../../components/common/Button";
-import Checkbox from "../../../components/common/Checkbox";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "../../../schemas/registerSchema";
 import { asyncUserRegister } from "../../../store/actions/userActions";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const navigate = useNavigate();
-  const {register, handleSubmit, formState : {errors}} = useForm({resolver : zodResolver(registerSchema)});
+  const {register, handleSubmit, formState : {errors, isSubmitting}} = useForm({resolver : zodResolver(registerSchema)});
   const dispatch = useDispatch()
-  const onSubmit = (user) =>{
-     console.log("userlll",user)
-     try {
-      const res =  dispatch(asyncUserRegister(user))
-      console.log("res in register",res)
-      if(res){
-       navigate("/dashboard")
-      } else {
-       navigate("/");
-      }
-      
-     } catch (error) {
-      console.log("error in register",error)
-     }
-    
+  const onSubmit = async (user) => {
+    try {
+      await dispatch(asyncUserRegister(user));
+      toast.success("Account created successfully. Please log in.");
+      navigate("/");
+    } catch (error) {
+      console.log("error in register", error);
+      toast.error("Failed to create account. Please try again.");
+    }
   }
   return (
     <>
@@ -59,7 +53,7 @@ const Register = () => {
               label="I agree to Terms & Conditions"
             /> */}
 
-            <Button type="submit">
+            <Button type="submit" loading={isSubmitting}>
               Create Account →
             </Button>
           </form>
