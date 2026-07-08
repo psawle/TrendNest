@@ -1,4 +1,11 @@
 import instance from "../../service/axios";
+import { loadProduct } from "../reducers/productsSlice";
+
+export const asyncGetProducts = (params = {}) => async (dispatch) => {
+  const res = await instance.get("/products", { params });
+  dispatch(loadProduct(res.data));
+  return res.data;
+};
 
 export const asyncGetProductById = (id) => async () => {
   const res = await instance.get(`/products/${id}`);
