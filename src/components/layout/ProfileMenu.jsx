@@ -2,11 +2,25 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Popover from "../common/Popover";
 import { logoutUser } from "../../store/actions/userActions";
+import { UserIcon, GridIcon, PlusIcon, LogOutIcon } from "../common/icons";
 
-const MenuLink = ({ to, onClick, children }) => (
-  <Link to={to} onClick={onClick} className="block px-3 py-2 text-sm rounded-lg hover:bg-gray-50">
+const MenuItem = ({ to, onClick, icon: Icon, children }) => (
+  <Link
+    to={to}
+    onClick={onClick}
+    className="flex items-center gap-2.5 px-3 py-2 text-sm rounded-lg text-gray-700 transition-colors hover:bg-gray-50"
+  >
+    <Icon className="h-4 w-4 text-gray-400" />
     {children}
   </Link>
+);
+
+const Avatar = ({ initial, className = "h-8 w-8 text-sm" }) => (
+  <span
+    className={`flex shrink-0 items-center justify-center rounded-full bg-[var(--primary)] font-semibold text-white ${className}`}
+  >
+    {initial}
+  </span>
 );
 
 const ProfileMenu = () => {
@@ -20,37 +34,69 @@ const ProfileMenu = () => {
     navigate("/");
   };
 
+  const initial = (currentUser?.name || currentUser?.username || "?").charAt(0).toUpperCase();
+
   return (
-    <Popover ariaLabel="Account" trigger={<span aria-hidden="true" className="text-xl">👤</span>}>
-      {({ close }) => (
-        <div className="w-56 bg-white rounded-xl shadow-lg border p-2">
-          {currentUser ? (
-            <>
-              <div className="px-3 py-2 border-b mb-1">
+    <Popover
+      ariaLabel="Account"
+      panelClassName="w-60 p-2"
+      trigger={currentUser ? <Avatar initial={initial} /> : <UserIcon />}
+    >
+      {({ close }) =>
+        currentUser ? (
+          <div>
+            <div className="flex items-center gap-3 px-3 py-2 mb-1">
+              <Avatar initial={initial} className="h-9 w-9 text-sm" />
+              <div className="min-w-0">
                 <p className="text-sm font-medium truncate">
                   {currentUser.name || currentUser.username}
                 </p>
                 <p className="text-xs text-gray-500 truncate">{currentUser.email}</p>
               </div>
-              <MenuLink to="/dashboard" onClick={close}>Dashboard</MenuLink>
-              <MenuLink to="/admin/products/new" onClick={close}>Add Product</MenuLink>
-              <MenuLink to="/admin/users/new" onClick={close}>Add User</MenuLink>
-              <button
-                type="button"
-                onClick={() => handleLogout(close)}
-                className="w-full text-left px-3 py-2 text-sm rounded-lg hover:bg-gray-50 text-red-600"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <MenuLink to="/" onClick={close}>Login</MenuLink>
-              <MenuLink to="/register" onClick={close}>Register</MenuLink>
-            </>
-          )}
-        </div>
-      )}
+            </div>
+
+            <div className="h-px bg-gray-100 my-1" />
+
+            <MenuItem to="/dashboard" onClick={close} icon={GridIcon}>
+              Dashboard
+            </MenuItem>
+            <MenuItem to="/admin/products/new" onClick={close} icon={PlusIcon}>
+              Add Product
+            </MenuItem>
+            <MenuItem to="/admin/users/new" onClick={close} icon={PlusIcon}>
+              Add User
+            </MenuItem>
+
+            <div className="h-px bg-gray-100 my-1" />
+
+            <button
+              type="button"
+              onClick={() => handleLogout(close)}
+              className="flex w-full items-center gap-2.5 px-3 py-2 text-sm rounded-lg text-red-600 transition-colors hover:bg-red-50"
+            >
+              <LogOutIcon className="h-4 w-4" />
+              Logout
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-1.5 p-1">
+            <Link
+              to="/"
+              onClick={close}
+              className="block rounded-lg bg-[var(--primary)] py-2 text-center text-sm font-medium text-white transition-colors hover:bg-[var(--primary-hover)]"
+            >
+              Login
+            </Link>
+            <Link
+              to="/register"
+              onClick={close}
+              className="block rounded-lg border border-gray-200 py-2 text-center text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+            >
+              Register
+            </Link>
+          </div>
+        )
+      }
     </Popover>
   );
 };
