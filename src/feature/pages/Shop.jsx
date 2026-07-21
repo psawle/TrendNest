@@ -1,69 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Navbar from "../../components/layout/Navbar";
 import ProductCard from "../../components/common/ProductCard";
-import Spinner from "../../components/common/Spinner";
 import { asyncGetProducts } from "../../store/actions/productActions";
 import { getCollectionBySlug } from "../../constants/collections";
 
 const Shop = () => {
-  const { collection: collectionSlug = "" } = useParams();
-  const [searchParams] = useSearchParams();
-  const search = searchParams.get("search") ?? "";
-  const dispatch = useDispatch();
-  const products = useSelector((state) => state.products.productData);
-  const collection = getCollectionBySlug(collectionSlug);
-
-  // Derived (not duplicated) loading state: "loading" simply means the products
-  // currently in the store don't correspond to this collection/search yet.
-  const requestKey = `${collection.slug}:${search}`;
-  const [loadedKey, setLoadedKey] = useState(null);
-  const loading = loadedKey !== requestKey;
-
-  useEffect(() => {
-    let isMounted = true;
-
-    const params = { ...collection.params };
-    // json-server v1's query syntax: `field:contains` does a case-insensitive
-    // substring match (there's no free-text `q` param like the old v0 API).
-    if (search) params["title:contains"] = search;
-
-    dispatch(asyncGetProducts(params)).finally(() => {
-      if (isMounted) setLoadedKey(requestKey);
-    });
-
-    return () => {
-      isMounted = false;
-    };
-  }, [collection, search, dispatch, requestKey]);
-
-  return (
-    <>
-      <Navbar />
-
-      <div className="min-h-[calc(100vh-64px)] bg-gray-50 px-6 py-8">
-        <h1 className="text-2xl font-bold mb-1">{collection.label}</h1>
-        {search && (
-          <p className="text-gray-500 mb-6">Search results for &quot;{search}&quot;</p>
-        )}
-
-        {loading ? (
-          <div className="flex justify-center py-16">
-            <Spinner />
-          </div>
-        ) : products.length === 0 ? (
-          <p className="text-gray-500">No products found.</p>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        )}
-      </div>
-    </>
-  );
+  const { collection: collectionSlug = "" } = useParams(); const [searchParams] = useSearchParams(); const search = searchParams.get("search") ?? "";
+  const dispatch = useDispatch(); const products = useSelector((state) => state.products.productData); const collection = getCollectionBySlug(collectionSlug);
+  const requestKey = `${collectionSlug}:${search}`; const [loadedKey, setLoadedKey] = useState(null); const loaded = loadedKey === requestKey; const [category, setCategory] = useState("all"); const [sort, setSort] = useState("featured");
+  useEffect(() => { let active = true; const params = { ...collection.params }; if (search) params["title:contains"] = search; dispatch(asyncGetProducts(params)).finally(() => { if (active) setLoadedKey(requestKey); }); return () => { active = false; }; }, [collectionSlug, search, dispatch, collection.params, requestKey]);
+  const categories = useMemo(() => ["all", ...new Set(products.map((item) => item.category))], [products]);
+  const visibleProducts = useMemo(() => products.filter((item) => category === "all" || item.category === category).sort((a,b) => sort === "low" ? a.price-b.price : sort === "high" ? b.price-a.price : 0), [products, category, sort]);
+  return <div className="site-shell"><Navbar /><main className="container-custom py-8 sm:py-12"><div className="border-b border-[var(--line)] pb-8"><p className="eyebrow">Curated catalogue</p><h1 className="mt-3 text-4xl font-semibold sm:text-5xl">{search ? `Results for “${search}”` : collection.label}</h1><p className="mt-3 section-copy">Pieces selected for the way you live, work, and unwind.</p></div><div className="mt-7 grid gap-8 lg:grid-cols-[220px_1fr]"><aside className="lg:sticky lg:top-24 lg:h-fit"><div className="flex items-center justify-between lg:block"><h2 className="text-sm font-extrabold">Refine</h2><span className="text-xs text-[var(--muted)]">{visibleProducts.length} pieces</span></div><div className="mt-4 flex gap-2 overflow-x-auto pb-1 lg:flex-col">{categories.map((item) => <button type="button" key={item} onClick={() => setCategory(item)} className={`whitespace-nowrap rounded-full px-3 py-2 text-left text-sm capitalize transition lg:rounded-lg ${category === item ? "bg-[var(--ink)] font-bold text-white" : "text-[#5e596a] hover:bg-[#eeeaf6]"}`}>{item === "all" ? "All pieces" : item}</button>)}</div><div className="mt-7 hidden border-t border-[var(--line)] pt-5 lg:block"><p className="text-sm font-bold">Price range</p><div className="mt-4 h-1 rounded-full bg-[#dfdae8]"><div className="h-full w-3/4 rounded-full bg-[var(--primary)]" /></div><div className="mt-3 flex justify-between text-xs text-[var(--muted)]"><span>₹0</span><span>₹50,000+</span></div></div></aside><section><div className="mb-6 flex items-center justify-between"><span className="text-sm text-[var(--muted)]">{loaded ? `${visibleProducts.length} considered finds` : "Loading pieces..."}</span><label className="flex items-center gap-2 text-xs font-bold text-[#5e596a]">Sort <select value={sort} onChange={(e) => setSort(e.target.value)} className="rounded-lg border border-[var(--line)] bg-white px-3 py-2 text-sm font-medium text-[var(--ink)] outline-none"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option></select></label></div>{!loaded ? <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">{Array.from({length:8}).map((_,i) => <div key={i} className="animate-pulse"><div className="aspect-[4/5] rounded-[14px] bg-[#ece9f1]" /><div className="mt-3 h-3 w-2/3 rounded bg-[#ece9f1]" /></div>)}</div> : visibleProducts.length ? <div className="grid grid-cols-2 gap-x-3 gap-y-8 sm:grid-cols-3 xl:grid-cols-4">{visibleProducts.map((product, index) => <ProductCard key={product.id} product={product} index={index} />)}</div> : <div className="rounded-[14px] border border-dashed border-[#d7d2e1] bg-white px-6 py-20 text-center"><h3 className="text-lg font-bold">Nothing quite matches that.</h3><p className="mt-2 text-sm text-[var(--muted)]">Try another filter or explore the full collection.</p><button onClick={() => setCategory("all")} className="button-primary mt-5">Reset filters</button></div>}</section></div></main></div>;
 };
-
 export default Shop;

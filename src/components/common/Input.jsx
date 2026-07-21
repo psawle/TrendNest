@@ -1,40 +1,11 @@
-const Input = ({
-    label,
-    error,
-    type = "text",
-    ...props
-  }) => {
-    return (
-      <div className="space-y-1 px-2">
-        {label && (
-          <label className="text-sm font-medium">
-            {label}
-          </label>
-        )}
-  
-        <input
-          type={type}
-          {...props}
-          className="
-            w-full
-            border
-            border-gray-300
-            rounded-lg
-            px-4
-            py-3
-            outline-none
-            focus:ring-2
-            focus:ring-indigo-500
-          "
-        />
-  
-        {error && (
-          <p className="text-red-500 text-sm">
-            {error}
-          </p>
-        )}
-      </div>
-    );
-  };
-  
-  export default Input;
+import { forwardRef } from "react";
+
+const Input = forwardRef(({ label, error, type = "text", className = "", ...props }, ref) => (
+  <label className="group relative block">
+    <span className="mb-1.5 block text-xs font-bold tracking-wide text-[#4d4958]">{label}</span>
+    <input ref={ref} type={type} className={`w-full rounded-xl border bg-white px-4 py-3 text-sm text-[var(--ink)] outline-none transition placeholder:text-[#aaa5b4] focus:border-[var(--primary)] focus:ring-4 focus:ring-[#5b3fd0]/10 ${error ? "border-red-400" : "border-[var(--line)]"} ${className}`} {...props} />
+    {error && <span className="mt-1.5 block text-xs font-medium text-red-600">{error}</span>}
+  </label>
+));
+Input.displayName = "Input";
+export default Input;
